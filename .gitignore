@@ -1,0 +1,10 @@
+.DS_Store
+*.log
+*.test
+*.out
+/bin/
+/dist/
+/vendor/
+/.terraform/
+.terraform.lock.hcl
+trino.pem

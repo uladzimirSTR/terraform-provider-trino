@@ -39,8 +39,6 @@ type trinoProviderModel struct {
 	Catalog     types.String `tfsdk:"catalog"`
 	SchemaName  types.String `tfsdk:"schema_name"`
 	HttpScheme  types.String `tfsdk:"http_scheme"`
-	Auth        types.String `tfsdk:"auth"`
-	Verify      types.String `tfsdk:"verify"`
 	PathToPem   types.String `tfsdk:"path_to_pem"`
 	FileNamePem types.String `tfsdk:"file_name_pem"`
 }
@@ -85,14 +83,6 @@ func (p *trinoProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp
 			},
 			"http_scheme": schema.StringAttribute{
 				Description: "The HTTP scheme to use when connecting to the Trino server (e.g., http or https).",
-				Optional:    true,
-			},
-			"auth": schema.StringAttribute{
-				Description: "The authentication method to use when connecting to the Trino server (e.g., basic, kerberos).",
-				Optional:    true,
-			},
-			"verify": schema.StringAttribute{
-				Description: "Whether to verify the server's TLS certificate when connecting to the Trino server (e.g., true or false).",
 				Optional:    true,
 			},
 			"path_to_pem": schema.StringAttribute{

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -115,6 +116,53 @@ func (p *trinoProvider) Configure(ctx context.Context, req provider.ConfigureReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	if config.Host.IsUnknown() || config.Host.IsNull() {
+
+		resp.Diagnostics.AddAttributeError(
+			path.Root("host"),
+			"Missing Trino host",
+			"The provider cannot create a Trino client without a host.",
+		)
+	}
+
+	if config.User.IsUnknown() || config.User.IsNull() {
+
+		resp.Diagnostics.AddAttributeError(
+			path.Root("user"),
+			"Missing Trino user",
+			"The provider cannot create a Trino client without a user.",
+		)
+	}
+
+	if config.Password.IsUnknown() || config.Password.IsNull() {
+
+		resp.Diagnostics.AddAttributeError(
+			path.Root("password"),
+			"Missing Trino password",
+			"The provider cannot create a Trino client without a password.",
+		)
+	}
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	// c := &client.Client{
+
+	// 	Host:     config.Host.ValueString(),
+	// 	Port:     int(config.Port.ValueInt32()),
+	// 	User:     config.User.ValueString(),
+	// 	Password: config.Password.ValueString(),
+	// 	Catalog:  config.Catalog.ValueString(),
+	// 	Schema:   config.SchemaName.ValueString(),
+	// 	// HTTPS:    useHTTPS,
+	// 	// Insecure: insecure,
+	// }
+	// c.BaseURL = fmt.Sprintf("%s://%s:%d", c.Protocol(), c.Host, c.Port)
+	// resp.DataSourceData = c
+	// resp.ResourceData = c
+
 }
 
 // DataSources defines the data sources implemented in the provider.

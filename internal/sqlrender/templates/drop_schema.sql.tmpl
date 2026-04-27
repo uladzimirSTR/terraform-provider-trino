@@ -1,0 +1,1 @@
+DROP SCHEMA {{ if .IfExists }}IF EXISTS {{ end }}{{ fqSchema .TableSchema }}{{ if .Cascade }} CASCADE{{ end }}

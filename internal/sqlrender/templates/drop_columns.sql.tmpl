@@ -1,0 +1,3 @@
+{{- range .ColNames }}
+ALTER TABLE {{ fqTable $.Table }} DROP COLUMN {{ qident . }};
+{{- end }}

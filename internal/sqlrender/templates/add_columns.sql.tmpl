@@ -1,0 +1,6 @@
+ALTER TABLE {{ fqTable .Table }}
+ADD COLUMN (
+{{- range $i, $c := .Columns }}
+  {{ qident $c.ColName }} {{ $c.ColType }}{{ if notLastColumn $i $.Columns }},{{ end }}
+{{- end }}
+)

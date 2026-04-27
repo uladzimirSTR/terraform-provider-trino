@@ -1,0 +1,4 @@
+CREATE SCHEMA {{ if .IfNotExists }}IF NOT EXISTS {{ end }}{{ fqSchema .TableSchema }}
+WITH (
+  location = {{ sqlString (s3Join .TableSchema.Location .TableSchema.Name) }}
+)

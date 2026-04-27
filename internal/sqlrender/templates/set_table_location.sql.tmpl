@@ -1,0 +1,4 @@
+ALTER TABLE {{ fqTable .Table }}
+SET PROPERTIES (
+  external_location = {{ sqlString .ExternalLocation }}
+)

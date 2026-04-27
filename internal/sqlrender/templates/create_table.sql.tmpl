@@ -1,0 +1,11 @@
+{{- $props := tableWithProps .Table -}}
+CREATE TABLE {{ if .IfNotExists }}IF NOT EXISTS {{ end }}{{ fqTableFromTable .Table }} (
+{{- range $i, $c := .Table.Columns }}
+  {{ qident $c.ColName }} {{ $c.ColType }}{{ if $c.Comment }} COMMENT {{ sqlString $c.Comment }}{{ end }}{{ if notLastColumn $i $.Table.Columns }},{{ end }}
+{{- end }}
+)
+{{- if $props }}
+WITH (
+{{ propsSQL $props }}
+)
+{{- end }}

@@ -9,11 +9,11 @@ import (
 //go:embed templates/*.sql.tmpl
 var templatesFS embed.FS
 
-type Renderer struct {
+type Renderer[Model any] struct {
 	t *template.Template
 }
 
-func NewRenderer() (*Renderer, error) {
+func NewRenderer[Model any]() (*Renderer[Model], error) {
 	funcs := template.FuncMap{
 		"qident":           qident,
 		"fqSchema":         fqSchema,
@@ -32,10 +32,10 @@ func NewRenderer() (*Renderer, error) {
 		return nil, err
 	}
 
-	return &Renderer{t: t}, nil
+	return &Renderer[Model]{t: t}, nil
 }
 
-func (r *Renderer) Render(name string, data any) (string, error) {
+func (r *Renderer[Model]) Render(name string, data Model) (string, error) {
 	var buf bytes.Buffer
 
 	err := r.t.ExecuteTemplate(&buf, name, data)

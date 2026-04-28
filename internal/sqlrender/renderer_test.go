@@ -6,7 +6,7 @@ import (
 )
 
 func TestRenderCreateSchema(t *testing.T) {
-	r, err := NewRenderer()
+	r, err := NewRenderer[CreateSchemaData]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -38,7 +38,7 @@ func TestRenderCreateSchema(t *testing.T) {
 }
 
 func TestRenderCreateTable(t *testing.T) {
-	r, err := NewRenderer()
+	r, err := NewRenderer[CreateTableData]()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -83,7 +83,7 @@ func TestRenderCreateTable(t *testing.T) {
 }
 
 func TestRenderAddColumns(t *testing.T) {
-	r, err := NewRenderer()
+	r, err := NewRenderer[AddColumnsData]()
 	if err != nil {
 		t.Fatal(err)
 	}

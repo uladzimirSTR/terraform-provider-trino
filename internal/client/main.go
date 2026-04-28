@@ -20,7 +20,7 @@ func NewClient(cfg Config) (*Client, error) {
 		return nil, err
 	}
 
-	httpClient, customClientName, err := buildHTTPClient(cfg)
+	httpClient, customClientName, err := cfg.buildHTTPClient()
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func NewClient(cfg Config) (*Client, error) {
 		}
 	}
 
-	dsn, err := buildDSN(cfg, customClientName)
+	dsn, err := cfg.buildDSN(customClientName)
 	if err != nil {
 		return nil, err
 	}

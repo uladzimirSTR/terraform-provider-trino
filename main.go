@@ -9,7 +9,7 @@ import (
 	"github.com/uladzimirSTR/terraform-provider-trino/internal/provider"
 )
 
-var version string = "dev"
+var version string = "0.1.0"
 var name string = "trino"
 
 func main() {

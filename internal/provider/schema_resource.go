@@ -97,7 +97,7 @@ func (r *schemaResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
-	exists, err := r.readSchema(ctx, state)
+	exists, err := r.SchemaExists(ctx, state)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to read Trino schema",

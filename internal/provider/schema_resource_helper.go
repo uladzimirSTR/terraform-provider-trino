@@ -50,8 +50,9 @@ func (r *schemaResource) dropSchema(ctx context.Context, data schemaResourceMode
 	return r.client.Exec(ctx, sql)
 }
 
-func (r *schemaResource) readSchema(ctx context.Context, data schemaResourceModel) (bool, error) {
+func (r *schemaResource) SchemaExists(ctx context.Context, data schemaResourceModel) (bool, error) {
 	rnd, err := rndr.NewRenderer[rndr.TableSchema]()
+
 	if err != nil {
 		return false, fmt.Errorf("create SQL renderer: %w", err)
 	}

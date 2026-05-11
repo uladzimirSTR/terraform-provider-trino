@@ -1,1 +1,3 @@
-SELECT schema_name FROM {{ .Catalog }}.information_schema.schemata WHERE schema_name = {{ .Name }}
+SELECT schema_name
+FROM {{ .Catalog }}.information_schema.schemata
+WHERE schema_name = '{{ .Name }}'

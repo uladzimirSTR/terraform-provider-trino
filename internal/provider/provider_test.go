@@ -117,8 +117,18 @@ func TestProviderResources(t *testing.T) {
 
 	resources := p.Resources(context.Background())
 
-	if len(resources) != 0 {
-		t.Fatalf("expected no resources, got %d", len(resources))
+	if len(resources) != 1 {
+		t.Fatalf("expected 1 resource, got %d", len(resources))
+	}
+
+	res := resources[0]()
+	if res == nil {
+		t.Fatalf("expected resource, got nil")
+	}
+
+	_, ok := res.(*schemaResource)
+	if !ok {
+		t.Fatalf("expected *schemaResource, got %T", res)
 	}
 }
 

@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     trino = {
-      source  = "uladzimirSTR/trino"
+      source  = "ulstr/trino"
       version = "0.1.0"
     }
   }

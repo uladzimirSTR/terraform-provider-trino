@@ -10,6 +10,7 @@ import (
 )
 
 var version string = "dev"
+var name string = "trino"
 
 func main() {
 	var debug bool
@@ -22,7 +23,7 @@ func main() {
 		Debug:   debug,
 	}
 
-	err := providerserver.Serve(context.Background(), provider.New(version), opts)
+	err := providerserver.Serve(context.Background(), provider.New(version, name), opts)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

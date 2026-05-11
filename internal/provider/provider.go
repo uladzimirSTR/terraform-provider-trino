@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -9,11 +10,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/uladzimirSTR/terraform-provider-trino/internal/client"
 )
 
 // trinoProvider is the provider implementation.
 type trinoProvider struct {
 	version string
+	name    string
 }
 
 // Ensure the implementation satisfies the expected interfaces.
@@ -22,10 +25,11 @@ var (
 )
 
 // New is a helper function to simplify provider server and testing implementation.
-func New(version string) func() provider.Provider {
+func New(version string, name string) func() provider.Provider {
 	return func() provider.Provider {
 		return &trinoProvider{
 			version: version,
+			name:    name,
 		}
 	}
 }
@@ -45,7 +49,7 @@ type trinoProviderModel struct {
 
 // Metadata returns the provider type name.
 func (p *trinoProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "trino"
+	resp.TypeName = p.name
 	resp.Version = p.version
 }
 
@@ -138,20 +142,29 @@ func (p *trinoProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		return
 	}
 
-	// c := &client.Client{
+	clientConfig := client.Config{
+		Host:        config.Host.ValueString(),
+		Port:        int(config.Port.ValueInt32()),
+		User:        config.User.ValueString(),
+		Password:    config.Password.ValueString(),
+		Catalog:     config.Catalog.ValueString(),
+		Schema:      config.SchemaName.ValueString(),
+		HTTPScheme:  config.HttpScheme.ValueString(),
+		PathToPEM:   config.PathToPem.ValueString(),
+		FileNamePEM: config.FileNamePem.ValueString(),
+	}
 
-	// 	Host:     config.Host.ValueString(),
-	// 	Port:     int(config.Port.ValueInt32()),
-	// 	User:     config.User.ValueString(),
-	// 	Password: config.Password.ValueString(),
-	// 	Catalog:  config.Catalog.ValueString(),
-	// 	Schema:   config.SchemaName.ValueString(),
-	// 	// HTTPS:    useHTTPS,
-	// 	// Insecure: insecure,
-	// }
-	// c.BaseURL = fmt.Sprintf("%s://%s:%d", c.Protocol(), c.Host, c.Port)
-	// resp.DataSourceData = c
-	// resp.ResourceData = c
+	trinoClient, err := client.NewClient(clientConfig)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Unable to create Trino client",
+			fmt.Sprintf("Failed to create Trino client: %s", err),
+		)
+		return
+	}
+
+	resp.DataSourceData = trinoClient
+	resp.ResourceData = trinoClient
 
 }
 

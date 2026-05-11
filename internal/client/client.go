@@ -61,6 +61,10 @@ func (c *Client) Exec(ctx context.Context, query string) error {
 	return nil
 }
 
+func (c *Client) QueryRow(ctx context.Context, query string, args ...any) *sql.Row {
+	return c.db.QueryRowContext(ctx, query, args...)
+}
+
 func (c *Client) Close() error {
 	if c.db == nil {
 		return nil

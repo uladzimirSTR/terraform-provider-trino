@@ -8,3 +8,4 @@
 /.terraform/
 .terraform.lock.hcl
 trino.pem
+example/schema_local/*

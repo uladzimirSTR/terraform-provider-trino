@@ -1,0 +1,4 @@
+SELECT table_name
+FROM {{ .TableSchema.Catalog }}.information_schema.tables
+WHERE table_schema = '{{ .TableSchema.Name }}'
+    AND table_name = '{{ .TableName }}'

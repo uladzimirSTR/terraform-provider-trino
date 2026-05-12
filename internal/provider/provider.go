@@ -177,5 +177,6 @@ func (p *trinoProvider) DataSources(_ context.Context) []func() datasource.DataS
 func (p *trinoProvider) Resources(_ context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewSchemaResource,
+		NewTableResource,
 	}
 }

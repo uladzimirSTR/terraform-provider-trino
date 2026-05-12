@@ -9,11 +9,18 @@ import (
 	rndr "github.com/uladzimirSTR/terraform-provider-trino/internal/sqlrender"
 )
 
-func convertToTableColumns(ctx context.Context, list types.List) []rndr.Column {
+func convertToTableColumns(ctx context.Context, cols types.List, prt types.List) []rndr.Column {
 	var tfColumns []tableColumnModel
-	list.ElementsAs(ctx, &tfColumns, false)
+	var tfPartitions []tablePartitionModel
 
-	columns := make([]rndr.Column, 0, len(tfColumns))
+	ColsErr := cols.ElementsAs(ctx, &tfColumns, false)
+	PartsErr := prt.ElementsAs(ctx, &tfPartitions, false)
+
+	columns := make([]rndr.Column, 0, len(tfColumns)+len(tfPartitions))
+
+	if ColsErr != nil || PartsErr != nil {
+		return columns
+	}
 
 	for _, col := range tfColumns {
 		columns = append(columns, rndr.Column{
@@ -23,25 +30,34 @@ func convertToTableColumns(ctx context.Context, list types.List) []rndr.Column {
 		})
 	}
 
+	for _, part := range tfPartitions {
+		columns = append(columns, rndr.Column{
+			ColName: part.Name.ValueString(),
+			ColType: part.Type.ValueString(),
+			Comment: "partition key",
+		})
+	}
+
 	return columns
 }
 
 func convertToPartitionKeys(ctx context.Context, list types.List) []string {
-	var keys []string
 	if list.IsNull() {
-		return keys
+		return []string{}
 	}
 
-	var tfKeys []types.String
+	var tfKeys []tablePartitionModel
 
 	err := list.ElementsAs(ctx, &tfKeys, false)
 
 	if err != nil {
-		return keys
+		return []string{}
 	}
 
+	keys := make([]string, 0, len(tfKeys))
+
 	for _, k := range tfKeys {
-		keys = append(keys, k.ValueString())
+		keys = append(keys, k.Name.ValueString())
 	}
 
 	return keys
@@ -63,7 +79,7 @@ func (r *tableResource) createTable(ctx context.Context, data tableResourceModel
 				Location: data.Location.ValueString(),
 			},
 			TableName: data.Name.ValueString(),
-			Columns:   convertToTableColumns(ctx, data.Columns),
+			Columns:   convertToTableColumns(ctx, data.Columns, data.PartitionKeys),
 			TableProp: rndr.TableProperties{
 				Format:        data.Format.ValueString(),
 				PartitionedBy: convertToPartitionKeys(ctx, data.PartitionKeys),

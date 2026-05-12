@@ -1,18 +1,24 @@
-resource "trino_table" "example" {
+resource "trino_schema" "example" {
   catalog  = "datalake"
-  schema_name = "example_schema"
-  name     = "example_table "
+  name     = "example_schema"
   location = "s3a://prod-datalake-gypsy"
+}
+
+resource "trino_table" "example" {
+  catalog  = trino_schema.example.catalog
+  schema_name = trino_schema.example.name
+  name     = "example_table"
+  location = trino_schema.example.location
   format = "parquet"
 
   partition_keys = [
     {
       name = "dt"
-      type = "string"
+      type = "varchar"
     },
     {
       name = "country"
-      type = "string"
+      type = "varchar"
     }
   ]
 
@@ -23,11 +29,7 @@ resource "trino_table" "example" {
     },
     {
       name = "name"
-      type = "string"
-    },
-    {
-      name = "age"
-      type = "integer"
+      type = "varchar"
     }
   ]
 

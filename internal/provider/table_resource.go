@@ -30,6 +30,11 @@ type tableColumnModel struct {
 	Description types.String `tfsdk:"description"`
 }
 
+type tablePartitionModel struct {
+	Name types.String `tfsdk:"name"`
+	Type types.String `tfsdk:"type"`
+}
+
 type tableResourceModel struct {
 	Catalog       types.String `tfsdk:"catalog"`
 	SchemaName    types.String `tfsdk:"schema_name"`
@@ -73,6 +78,17 @@ func (r *tableResource) Schema(_ context.Context, req resource.SchemaRequest, re
 			"format": rschema.StringAttribute{
 				Description: "Table data format (e.g. PARQUET).",
 				Optional:    true,
+			},
+			"partition_keys": rschema.ListNestedAttribute{
+				Description: "List of partition keys.",
+				Optional:    true,
+
+				NestedObject: rschema.NestedAttributeObject{
+					Attributes: map[string]rschema.Attribute{
+						"name": rschema.StringAttribute{Required: true},
+						"type": rschema.StringAttribute{Required: true},
+					},
+				},
 			},
 			"columns": rschema.ListNestedAttribute{
 				Description: "List of table columns.",

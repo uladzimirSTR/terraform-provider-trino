@@ -9,3 +9,4 @@
 .terraform.lock.hcl
 trino.pem
 examples/schema_local/*
+examples/table_local/*

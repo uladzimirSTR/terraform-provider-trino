@@ -1,7 +1,7 @@
 resource "trino_schema" "example" {
   catalog  = "datalake"
   name     = "example_schema"
-  location = "s3a://prod-datalake-gypsy"
+  location = "s3a://prod-datalake"
 }
 
 resource "trino_table" "example" {

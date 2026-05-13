@@ -1,5 +1,5 @@
 PROVIDER_NAME := trino
-PROVIDER_NAMESPACE := $(shell whoami)
+PROVIDER_NAMESPACE := ulstr
 PROVIDER_HOSTNAME := registry.terraform.io
 VERSION := 0.1.0
 OS_ARCH := linux_amd64

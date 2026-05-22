@@ -330,7 +330,7 @@ Example:
 resource "trino_schema" "example" {
   catalog  = "datalake"
   name     = "example_schema"
-  location = "s3a://prod-datalake"
+  location = "s3a://prod-datalake/example_schema"
 }
 ```
 
@@ -344,14 +344,14 @@ Example:
 resource "trino_schema" "example" {
   catalog  = "datalake"
   name     = "example_schema"
-  location = "s3a://prod-datalake"
+  location = "s3a://prod-datalake/example_schema"
 }
 
 resource "trino_table" "example" {
   catalog     = trino_schema.example.catalog
   schema_name = trino_schema.example.name
   name        = "example_table"
-  location    = trino_schema.example.location
+  location    = "${trino_schema.example.location}/example_table"
   format      = "parquet"
 
   partition_keys = [

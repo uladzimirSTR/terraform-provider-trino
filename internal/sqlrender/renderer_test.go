@@ -16,7 +16,7 @@ func TestRenderCreateSchema(t *testing.T) {
 		TableSchema: TableSchema{
 			Catalog:  "datalake",
 			Name:     "stage",
-			Location: "s3a://test-data/",
+			Location: "s3a://test-data/stage",
 		},
 	})
 	if err != nil {
@@ -49,7 +49,7 @@ func TestRenderCreateTable(t *testing.T) {
 			TableSchema: TableSchema{
 				Catalog:  "datalake",
 				Name:     "stage",
-				Location: "s3://bucket/data",
+				Location: "s3://bucket/data/stage/provide.users",
 			},
 			TableName: "users",
 			Columns: []Column{
@@ -72,7 +72,7 @@ func TestRenderCreateTable(t *testing.T) {
 		`"email" VARCHAR COMMENT 'user''s email'`,
 		`format = 'PARQUET'`,
 		`partitioned_by = ARRAY['created_date']`,
-		`external_location = 's3://bucket/data/stage/users'`,
+		`external_location = 's3://bucket/data/stage/provide.users'`,
 	}
 
 	for _, check := range checks {

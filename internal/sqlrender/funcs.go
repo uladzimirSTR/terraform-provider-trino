@@ -120,9 +120,8 @@ func tableWithProps(t Table) map[string]any {
 		result["partitioned_by"] = t.TableProp.PartitionedBy
 	}
 
-	defaultLocation := s3Join(t.TableSchema.Location, t.TableSchema.Name, t.TableName)
-	if defaultLocation != "" {
-		result["external_location"] = defaultLocation
+	if t.TableSchema.Location != "" {
+		result["external_location"] = t.TableSchema.Location
 	}
 
 	return result
